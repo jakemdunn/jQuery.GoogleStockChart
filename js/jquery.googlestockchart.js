@@ -19,19 +19,19 @@
 (function ($) {
 
     var defaults = {
-        "data": "http://www.google.com/finance/info?client=ig&q=",
-        "chart": "http://www.google.com/finance/chart?cht=c&q=",
-        "chartDetailed": "http://www.google.com/finance/chart?tlf=12&chs=m&q=",
-        "match": "http://www.google.com/finance/match?matchtype=matchall&q=",
+		"data": "http://www.google.com/finance/info?client=ig&q=",
+		"chart": "http://www.google.com/finance/chart?cht=c&q=",
+		"chartDetailed": "http://www.google.com/finance/chart?tlf=12&chs=m&q=",
+		"match": "http://www.google.com/finance/match?matchtype=matchall&q=",
 		"yql": "select * from html where url='{url}' limit 1",
-        "indexes": ["INDEXDJX:.DJI", "INDEXSP:.INX", "INDEXNASDAQ:.IXIC"],
-        "indexesDetail": [],
-        "cookies": true,
-        "cookiesExpires": 365, //one year
-        "chartSize": "small", //small, medium, or large
-        "inputLabel": "GOOG,.DJI,CSCO",
-        "sortable": true,
-        "indicateErrors": true
+		"indexes": ["INDEXDJX:.DJI", "INDEXSP:.INX", "INDEXNASDAQ:.IXIC"],
+		"indexesDetail": [],
+		"cookies": true,
+		"cookiesExpires": 365, //one year
+		"chartSize": "small", //small, medium, or large
+		"inputLabel": "GOOG,.DJI,CSCO",
+		"sortable": true,
+		"indicateErrors": true
     }
 
     var methods = {
@@ -181,9 +181,9 @@
 
             //Make sure it's valid
 			var detailURL = data.settings.match + index;
-			$.YQL(data.settings.yql.replace("{url}",detailURL), function(data) {
-				if(data.query.results == null) return;
-				returned = eval('('+data.query.results.body.p+')');
+			$.YQL(data.settings.yql.replace("{url}",detailURL), function(response) {
+				if(response.query.results == null) return;
+				returned = eval('('+response.query.results.body.p+')');
 				
                 if (returned.matches.length > 0 && returned.matches[0].e && returned.matches[0].t) {
                     var stock = returned.matches[0].e + ":" + returned.matches[0].t;
@@ -316,9 +316,9 @@
             var indexDetail = data.settings.indexesDetail[index];
             if (!indexDetail) {
                 var detailURL = data.settings.match + index;
-				$.YQL(data.settings.yql.replace("{url}",detailURL), function(data) {
-					if(data.query.results == null) return;
-					returned = eval('('+data.query.results.body.p+')');
+				$.YQL(data.settings.yql.replace("{url}",detailURL), function(response) {
+					if(response.query.results == null) return;
+					returned = eval('('+response.query.results.body.p+')');
 					
                     if (returned.matches.length > 0 && returned.matches[0].e && returned.matches[0].t) {
                         var stock = returned.matches[0].e + ":" + returned.matches[0].t;
@@ -374,17 +374,17 @@
 
     };
 
+	$.YQL = function(query, callback) {
+	 
+		if (!query || !callback) {
+			throw new Error('$.YQL(): Parameters may be undefined');
+		}
+	 
+		var encodedQuery = encodeURIComponent(query.toLowerCase()),
+			url = 'http://query.yahooapis.com/v1/public/yql?q='
+				+ encodedQuery + '&format=json&callback=?';
+	
+		$.getJSON(url, callback); 
+	};
+
 })(jQuery);
-
-$.YQL = function(query, callback) {
- 
-    if (!query || !callback) {
-        throw new Error('$.YQL(): Parameters may be undefined');
-    }
- 
-    var encodedQuery = encodeURIComponent(query.toLowerCase()),
-        url = 'http://query.yahooapis.com/v1/public/yql?q='
-            + encodedQuery + '&format=json&callback=?';
-
-    $.getJSON(url, callback); 
-};
