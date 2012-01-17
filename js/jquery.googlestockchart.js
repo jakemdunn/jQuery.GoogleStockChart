@@ -23,7 +23,7 @@
         "chart": "http://www.google.com/finance/chart?cht=c&q=",
         "chartDetailed": "http://www.google.com/finance/chart?tlf=12&chs=m&q=",
         "match": "http://www.google.com/finance/match?matchtype=matchall&q=",
-        "proxy": "/proxy?u=",
+		"yql": "select * from html where url='{url}' limit 1",
         "indexes": ["INDEXDJX:.DJI", "INDEXSP:.INX", "INDEXNASDAQ:.IXIC"],
         "indexesDetail": [],
         "cookies": true,
@@ -52,10 +52,18 @@
                 this.$chart = $('<div class="chart ' + data.settings.chartSize + '"/>').appendTo($this);
                 this.$list = $('<ul/>').appendTo($this);
                 var $form = this.$form = $('<form class="add-indexes"/>').appendTo($this);
-                var $input = this.$input = $('<input type="text"/>').appendTo($form);
-                var $refresh = this.$refresh = $('<a class="refresh" href="#refresh" title="Refresh">Refresh</a>').appendTo($this);
+				var $refresh = this.$refresh = $('<a class="refresh" href="#refresh" title="Refresh">Refresh</a>').appendTo($this);
+				
+				var $input = this.$input = $('<input type="text"/>').appendTo($form);
+				data.inputBg = $input.css("background-color");
+				
+				//Input Labelling
+				$input.focus(function(){
+					if($(this).val() == data.settings.inputLabel) $(this).val('').removeClass('labeled');
+				}).blur(function(){
+					if($(this).val() == '') $(this).val(data.settings.inputLabel).addClass('labeled');
+				}).blur();
 
-                data.inputBg = $input.css("background-color");
 
                 //Form Submissions
                 $form.submit(function () {
@@ -66,13 +74,6 @@
                     });
                     return false;
                 });
-
-                //Input Labelling
-                $input.focus(function(){
-                    if($(this).val() == data.settings.inputLabel) $(this).val('').removeClass('labeled');
-                }).blur(function(){
-                    if($(this).val() == '') $(this).val(data.settings.inputLabel).addClass('labeled');
-                }).blur();
 
                 //Manual Refresh
                 $refresh.click(function () {
@@ -174,13 +175,16 @@
             methods.update.apply(this);
         },
         addIndex: function (index) {
+			
             var $this = $(this);
             var data = $this.data();
 
             //Make sure it's valid
-            var matchURL = data.settings.proxy + escape(data.settings.match + index);
-
-            $.getJSON(matchURL, function (returned) {
+			var detailURL = data.settings.match + index;
+			$.YQL(data.settings.yql.replace("{url}",detailURL), function(data) {
+				if(data.query.results == null) return;
+				returned = eval('('+data.query.results.body.p+')');
+				
                 if (returned.matches.length > 0 && returned.matches[0].e && returned.matches[0].t) {
                     var stock = returned.matches[0].e + ":" + returned.matches[0].t;
                     data = $this.data();
@@ -311,9 +315,11 @@
             //If we need detail, get it, then update the popup
             var indexDetail = data.settings.indexesDetail[index];
             if (!indexDetail) {
-                var detailURL = data.settings.proxy + escape(data.settings.match + index);
-
-                $.getJSON(detailURL, function (returned) {
+                var detailURL = data.settings.match + index;
+				$.YQL(data.settings.yql.replace("{url}",detailURL), function(data) {
+					if(data.query.results == null) return;
+					returned = eval('('+data.query.results.body.p+')');
+					
                     if (returned.matches.length > 0 && returned.matches[0].e && returned.matches[0].t) {
                         var stock = returned.matches[0].e + ":" + returned.matches[0].t;
                         data.settings.indexesDetail[stock] = returned;
@@ -369,3 +375,16 @@
     };
 
 })(jQuery);
+
+$.YQL = function(query, callback) {
+ 
+    if (!query || !callback) {
+        throw new Error('$.YQL(): Parameters may be undefined');
+    }
+ 
+    var encodedQuery = encodeURIComponent(query.toLowerCase()),
+        url = 'http://query.yahooapis.com/v1/public/yql?q='
+            + encodedQuery + '&format=json&callback=?';
+
+    $.getJSON(url, callback); 
+};

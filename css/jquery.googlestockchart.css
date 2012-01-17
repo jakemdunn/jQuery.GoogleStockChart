@@ -1,0 +1,202 @@
+.google-stock-chart {
+	background: url("../images/spinner.gif") no-repeat 50% 50px;
+	position: relative;
+	margin: 10px 0;
+}
+.google-stock-chart.small{
+	max-width: 230px;
+}
+.google-stock-chart .chart {
+	background: url("../images/time_axis_labels.gif") no-repeat 0 100%;
+	position: relative;
+	overflow: hidden;
+	padding: 0 0 21px;
+}
+.google-stock-chart .chart.small {
+	height: 114px;
+}
+.google-stock-chart .chart img {
+	position: absolute;
+	width: 95%;
+	height: auto;
+	top: 0;
+	left: 2.5%;
+}
+.google-stock-chart ul {
+	list-style: none;
+	margin: 0;
+	padding: 15px 0;
+}
+.google-stock-chart ul li {
+	margin: 0;
+	padding: 5px 0 5px 5%;
+	width: 95%;
+	text-align: right;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	border-top: 1px solid #DDD;
+	position: relative;
+}
+.google-stock-chart ul li:first-child {
+	border: none;
+}
+.google-stock-chart ul li:hover {
+	background: #EFEFEF;
+}
+.google-stock-chart ul li .color {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 5px;
+	height: 100%;
+	background: #4582e7;
+}
+.google-stock-chart ul li.index-1 .color {
+	background: #d73a15;
+}
+.google-stock-chart ul li.index-2 .color {
+	background: #f7a10a;
+}
+.google-stock-chart ul li.index-3 .color {
+	background: #45ce29;
+}
+.google-stock-chart ul li span {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	vertical-align: top;
+	margin: 0;
+}
+.google-stock-chart ul li strong {
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+.google-stock-chart ul li strong a {
+	color: inherit;
+	text-decoration: none;
+}
+.google-stock-chart ul li strong a:hover {
+	text-decoration: underline;
+}
+.google-stock-chart ul li strong, .google-stock-chart ul li small.amount {
+	float: left;
+	margin: 0 4px 0 0;
+	padding: 0;
+	line-height: 18px;
+}
+.google-stock-chart ul li .plus {
+	color: #45ce29;
+}
+.google-stock-chart ul li .minus {
+	color: #d73a15;
+}
+.google-stock-chart ul li .delete {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	background: url("../images/delete.png") no-repeat 3px 3px;
+	text-indent: -2000px;
+	text-decoration: none;
+	width: 12px;
+	height: 12px;
+	padding: 3px;
+	vertical-align: top;
+	text-align: left;
+}
+.google-stock-chart .popup {
+	position: absolute;
+	left: 100%;
+	top: -85px;
+	margin: 0 0 0 20px;
+	padding: 20px 20px 20px 350px;
+	width: 200px;
+	height: 150px;
+	background: #FFF;
+	text-align: left;
+	z-index: 10;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	-o-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+.google-stock-chart .popup .detail-chart {
+	background: url("../images/spinner.gif") no-repeat 50% 50%;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 300px;
+	height: 150px;
+}
+.google-stock-chart .popup h2 {
+	margin: 0;
+	font-size: 20px;
+}
+.google-stock-chart .popup p {
+	margin: 5px 0;
+}
+.google-stock-chart .popup p.index {
+	font-size: 12px;
+	margin: 0 0 20px;
+}
+.google-stock-chart .popup:before {
+	content: " ";
+	position: absolute;
+	right: 100%;
+	top: 50%;
+	margin: -5px 0 0;
+	border-width: 10px;
+	border-style: solid;
+	border-color: transparent #FFF transparent transparent;
+}
+.google-stock-chart input {
+	width: 66%;
+	background: #EEE;
+	border: 1px solid #999;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) inset;
+	-moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) inset;
+	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) inset;
+	-o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) inset;
+	behaviour: url(/assets/js/pie.htc);
+	margin: 0 10px 15px;
+	text-transform: uppercase;
+	font-size: 12px;
+}
+.google-stock-chart input.labeled {
+	color: #999;
+	text-transform: none;
+}
+.google-stock-chart .refresh {
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-o-border-radius: 4px;
+	background: url("../images/reload.png") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	bottom: 18px;
+	right: 12px;
+	text-decoration: none;
+	border: 3px solid #FFF;
+	text-indent: -2000px;
+}
+.google-stock-chart .refresh:hover {
+	border-color: #188b18;
+}
+.google-stock-chart .ajax-running {
+	background: url("../images/spinner.gif") no-repeat 0 0 white;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	right: 15px;
+	bottom: 20px;
+}
+.google-stock-chart .sort-placeholder {
+	margin: 0 0 -3px 0;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.4) inset;
+	-moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.4) inset;
+	-webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.4) inset;
+	-o-box-shadow: 0 0 15px rgba(0, 0, 0, 0.4) inset;
+}
